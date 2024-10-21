@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Multiplication</title>
+    <link rel="stylesheet" href="static/styles.css"> <!-- Linking to external CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Matrix Multiplication</h1>
+        <form id="matrixForm">
+            <label for="matrix_A">Matrix A (comma-separated rows):</label>
+            <textarea id="matrix_A"></textarea>
+
+            <label for="matrix_B">Matrix B (comma-separated rows):</label>
+            <textarea id="matrix_B"></textarea>
+
+            <label for="operation">Choose Operation:</label>
+            <select id="operation">
+                <option value="standard">Standard Multiplication</option>
+                <option value="row_thread">Multithreaded (One thread per row)</option>
+                <option value="cell_thread">Multithreaded (One thread per cell)</option>
+            </select>
+
+            <button type="button" onclick="performMultiplication()">Multiply</button>
+            <button type="button" onclick="comparePerformance()">Compare Performance</button>
+        </form>
+
+        <!-- Result Section -->
+        <div class="result-section">
+            <h3>Result:</h3>
+            <table id="resultTable"></table>
+        </div>
+
+        <!-- Performance Comparison Section -->
+        <div class="performance-section">
+            <h3>Performance Comparison:</h3>
+            <table id="performanceTable">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Time (seconds)</th>
+                    </tr>
+                </thead>
+                <tbody id="performanceOutput"></tbody>
+            </table>
+        </div>
+    </div>
+    <footer>
+        <p>All rights are reserved © 2024</p>
+    </footer>
+    
+    <script>
+        function parseMatrix(input) {
+            return input.trim().split('\n').map(row => row.split(',').map(Number));
+        }
+
+        function performMultiplication() {
+            const matrixA = parseMatrix(document.getElementById('matrix_A').value);
+            const matrixB = parseMatrix(document.getElementById('matrix_B').value);
+            const operation = document.getElementById('operation').value;
+
+            fetch('/multiply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ matrix_A: matrixA, matrix_B: matrixB, operation: operation })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultTable = document.getElementById('resultTable');
+                resultTable.innerHTML = '';  // Clear previous result
+
+                // Display the result matrix in a table format
+                data.result.forEach(row => {
+                    const rowElement = document.createElement('tr');
+                    row.forEach(cell => {
+                        const cellElement = document.createElement('td');
+                        cellElement.textContent = cell;
+                        rowElement.appendChild(cellElement);
+                    });
+                    resultTable.appendChild(rowElement);
+                });
+            });
+        }
+
+        function comparePerformance() {
+            const matrixA = parseMatrix(document.getElementById('matrix_A').value);
+            const matrixB = parseMatrix(document.getElementById('matrix_B').value);
+
+            fetch('/compare', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ matrix_A: matrixA, matrix_B: matrixB })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const performanceTable = document.getElementById('performanceOutput');
+                performanceTable.innerHTML = '';  // Clear previous result
+
+                // Display the performance comparison in a table format
+                Object.entries(data.performance).forEach(([method, time]) => {
+                    const rowElement = document.createElement('tr');
+                    const methodCell = document.createElement('td');
+                    const timeCell = document.createElement('td');
+                    methodCell.textContent = method;
+                    timeCell.textContent = time;
+                    rowElement.appendChild(methodCell);
+                    rowElement.appendChild(timeCell);
+                    performanceTable.appendChild(rowElement);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

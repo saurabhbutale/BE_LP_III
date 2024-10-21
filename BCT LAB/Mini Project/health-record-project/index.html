@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Record System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+</head>
+<body>
+    <h2>Add New Patient</h2>
+    <form id="patientForm">
+        <label for="patientId">Patient ID:</label>
+        <input type="number" id="patientId" required><br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" required><br><br>
+
+        <label for="height">Height:</label>
+        <input type="text" id="height" required><br><br>
+
+        <label for="weight">Weight:</label>
+        <input type="text" id="weight" required><br><br>
+
+        <label for="disease">Disease:</label>
+        <input type="text" id="disease" required><br><br>
+
+        <label for="symptom1">Symptom 1:</label>
+        <input type="text" id="symptom1" required><br><br>
+
+        <label for="symptom2">Symptom 2:</label>
+        <input type="text" id="symptom2" required><br><br>
+
+        <button type="submit">Add Patient</button>
+    </form>
+
+    <h2>Get Patient Record</h2>
+    <label for="getPatientId">Patient ID:</label>
+    <input type="number" id="getPatientId" required>
+    <button onclick="getPatient()">Get Patient</button>
+
+    <h3>Patient Details</h3>
+    <p id="patientDetails"></p>
+
+    <script src="app.js"></script>
+</body>
+</html>
