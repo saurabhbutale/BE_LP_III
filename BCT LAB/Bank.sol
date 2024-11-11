@@ -34,10 +34,10 @@ contract MyBank
                 return _balances[msg.sender];
 
         }
-0x7567Ea2C81e5F9e8d519E33bEC9D2eAd461d6b91
         function viewBalance() public view returns (uint)
         {
             return _balances[msg.sender];
         }
    
 }
+0x7567Ea2C81e5F9e8d519E33bEC9D2eAd461d6b91
